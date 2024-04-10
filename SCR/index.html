@@ -10,14 +10,21 @@
     <div class="container">
          <h1>Data Science Salary Trends</h1>
         <div class="container">
-            <div id="barchart"></div>
-            <div id="parallelcoordinates"></div>
+            <div class="row">
+                <div id="barchart"></div>
+            </div>
+            <div class="row">
+                <div id="chloropleth"></div>
+            </div>
+            
         </div>
     </div>
 
     <script src="js/d3.v7.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/barChart.js"></script>
-    <script src="js/parallelCoordinates.js"></script>
+    <script src="js/chloropleth.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 </body>
 </html>

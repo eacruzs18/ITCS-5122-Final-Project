@@ -22,5 +22,8 @@ d3.csv('data/salaries.csv').then(_data => {
 
     parallelcoordinates = new ParallelCoordinates({parentElement: '#parallelcoordinates'}, data);
     parallelcoordinates.updateVis();
+
+    chloropleth = new Chloropleth({parentElement: '#chloropleth', data});
+    chloropleth.updateVis();
 })
 .catch(error => console.error(error));
