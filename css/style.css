@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Noto+Sans+JP:wght@100..900&display=swap');
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 13px;
+    padding: 30px;
+    background: #f7f7f7;
+}
+
+h1 {
+    margin-top: 0;
+}
+
+.container {
+    display: flex;
+}
+
+#scatterplot {
+    margin-right: 30px;
+}
+
+.bar {
+    shape-rendering: crispEdges;
+}
+
+.bar:hover {
+    stroke: #777;
+}
+
+.bar.active {
+    stroke: #000;
+    stroke-width: 2px;
+}
+
+.axis line {
+    fill: none;
+    stroke: #ddd;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-size: 13px;
+    fill: #6b6b6b;
+}
+
+.axis-title {
+    font-size: 13px;
+    fill: #888;
+}
+
+.y-axis .tick:first-child line {
+    stroke: #b1b1b1;
+}
+
+.y-axis .tick:first-child text {
+    display: none;
+}
+
+.x-axis .tick:first-child line {
+    display: none;
+}
+
+.axis path {
+    display: none;
+}
