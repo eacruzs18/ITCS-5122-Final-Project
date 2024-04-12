@@ -114,9 +114,10 @@ class ScatterPlot {
             .attr('fill', 'steelblue')
             .on('mouseover', function(event, d) {
                 const formattedSalary = d3.format(',.2f')(d.averageSalary);
+                const formattedCost = d3.format(',.2f')(d.averageCostOfLiving);
 
                 tooltip.style('visibility', 'visible')
-                    .html(`<strong>Country:</strong> ${d.country}<br><strong>Average Salary:</strong> $${formattedSalary}<br><strong>Average Cost of Living:</strong> ${d.averageCostOfLiving}`)
+                    .html(`<strong>Country:</strong> ${d.country}<br><strong>Average Salary:</strong> $${formattedSalary}<br><strong>Average Cost of Living:</strong> ${formattedCost}`)
                     .style('left', (event.pageX + 10) + 'px')
                     .style('top', (event.pageY - 30) + 'px');
             })
