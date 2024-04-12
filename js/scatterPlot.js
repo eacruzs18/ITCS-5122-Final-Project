@@ -62,20 +62,7 @@ class ScatterPlot {
         vis.yAxisG = vis.chart.append('g')
             .attr('class', 'axis y-axis');
 
-        vis.svg.append('text')
-            .attr('class', 'axis-title')
-            .attr('x', 0)
-            .attr('y', 25)
-            .attr('dy', '0.71em')
-            .text('Cost Of Living');
-
-        vis.chart.append('text')
-            .attr('class', 'axis-title')
-            .attr('x', vis.width + 10)
-            .attr('y', vis.height - 15)
-            .attr('dy', '0.71em')
-            .style('text-anchor', 'end')
-            .text('Salary In USD');
+        
 
         vis.countryData = d3.group(vis.data, d => d.country);
         vis.countryAverages = Array.from(vis.countryData, ([country, values]) => {
@@ -87,6 +74,21 @@ class ScatterPlot {
                 averageCostOfLiving
             };
         });
+
+        vis.svg.append('text')
+            .attr('class', 'axis-title')
+            .attr('x', 0)
+            .attr('y', 35)
+            .attr('dy', '0.71em')
+            .text('Cost Of Living');
+
+        vis.chart.append('text')
+            .attr('class', 'axis-title')
+            .attr('x', vis.width + 15)
+            .attr('y', vis.height - 15)
+            .attr('dy', '0.71em')
+            .style('text-anchor', 'end')
+            .text('Salary In USD');
     }
 
 
