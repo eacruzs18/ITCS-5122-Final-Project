@@ -45,10 +45,13 @@ class ScatterPlot {
         vis.yScale = d3.scaleLinear()
             .range([vis.height, 0]);
 
+        const xAxisFormat = d3.format('$.0f');
+
         vis.xAxis = d3.axisBottom(vis.xScale)
             .ticks(6)
             .tickSize(-vis.height - 10)
-            .tickPadding(10);
+            .tickPadding(10)
+            .tickFormat(xAxisFormat);
 
         vis.yAxis = d3.axisLeft(vis.yScale)
             .ticks(6)
