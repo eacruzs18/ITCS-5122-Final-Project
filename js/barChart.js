@@ -9,7 +9,7 @@ class BarChart {
     constructor(_config, _data, _colorScale) {
         this.config = {
             parentElement: _config.parentElement,
-            containerWidth: _config.containerWidth || 800,
+            containerWidth: _config.containerWidth || 500,
             containerHeight: _config.containerHeight || 300,
             margin: _config.margin || {
                 top: 30,
@@ -106,6 +106,9 @@ class BarChart {
         vis.xScale.domain(vis.aggregatedData.map(d => d.key));
         vis.yScale.domain([0, d3.max(vis.aggregatedData, d => d.value)]);
 
+        vis.colorScale = d3.scaleOrdinal(d3.schemeSet1)
+            .domain(vis.aggregatedData.map(d => d.key));
+
         vis.renderVis();
     }
 
@@ -124,7 +127,8 @@ class BarChart {
             .attr('x', d => vis.xScale(d.key))
             .attr('y', d => vis.yScale(d.value))
             .attr('width', vis.xScale.bandwidth())
-            .attr('height', d => vis.height - vis.yScale(d.value));
+            .attr('height', d => vis.height - vis.yScale(d.value))
+            .attr('fill', d => vis.colorScale(d.key));
 
         // Remove excess bars
         bars.exit().remove();

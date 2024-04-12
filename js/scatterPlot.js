@@ -77,6 +77,14 @@ class ScatterPlot {
             .style('text-anchor', 'end')
             .text('Salary In USD');
 
+        vis.svg.append('text')
+            .attr('class', 'chart-title')
+            .attr('x', vis.config.containerWidth / 2)
+            .attr('y', vis.config.margin.top / 10)
+            .attr('dy', '.71em')
+            .style('text-anchor', 'middle')
+            .text('Cost of Living vs. Average Salary by Country');
+
         vis.countryData = d3.group(vis.data, d => d.country);
         vis.countryAverages = Array.from(vis.countryData, ([country, values]) => {
             const averageSalary = d3.mean(values, d => d.salary);
