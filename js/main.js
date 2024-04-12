@@ -21,11 +21,8 @@ d3.csv('data/salarieswithcostoflivingdata.csv').then(_data => {
     barchart = new BarChart({
         parentElement: '#barchart'
     }, data, colorScale);
-    // barchart = new BarChart({
-    //     parentElement: '#barchart'
-    // }, data, colorScale, dispatcher);
-    // barchart.updateVis();
-    chloropleth = new Chloropleth({
+    
+   chloropleth = new Chloropleth({
         parentElement: '#chloropleth'
     }, data, colorScale);
     chloropleth.updateVis();

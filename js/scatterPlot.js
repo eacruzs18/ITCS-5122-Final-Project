@@ -122,7 +122,7 @@ class ScatterPlot {
     renderVis() {
         let vis = this;
 
-        // add cicrles
+        // add circles
         const bubbles = vis.chart
             .selectAll('.point')
             .data(vis.countryAverages)
@@ -135,6 +135,8 @@ class ScatterPlot {
             .on('mouseover', function(event, d) {
                 const formattedSalary = d3.format(',.2f')(d.averageSalary);
                 const formattedCost = d3.format(',.2f')(d.averageCostOfLiving);
+
+                console.log(`Hovered over ${d.country} - Average Salary: $${formattedSalary}, Average Cost of Living: $${formattedCost}`);
 
                 tooltip.style('visibility', 'visible')
                     .html(`<strong>Country:</strong> ${d.country}<br><strong><Average Salary:</strong> $${formattedSalary}<br><strong>Average Cost of Living:</strong> ${formattedCost}`)
