@@ -101,6 +101,14 @@ class ScatterPlot {
             .attr('dy', '0.71em')
             .style('text-anchor', 'end')
             .text('Salary In USD');
+
+            vis.svg.append('text')
+            .attr('class', 'chart-title')
+            .attr('x', vis.config.containerWidth / 2)
+            .attr('y', vis.config.margin.top / 10)
+            .attr('dy', '.71em')
+            .style('text-anchor', 'middle')
+            .text('Cost of living / Salary Comparison');
     }
 
     /**
