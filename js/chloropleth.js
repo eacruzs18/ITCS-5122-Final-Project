@@ -80,6 +80,32 @@ class Chloropleth {
                     d.total = vis.data.get(d.id) || 0;
                     return vis.colorScale(d.total);
                 })
+                .on('mouseover', function(event, d) {
+                    const formattedSalary = d3.format(',.2f')(d.total);
+        
+                    tooltip.style('visibility', 'visible')
+                        .html(`<strong>Country:</strong> ${d.id}<br><strong>Average Salary:</strong> $${formattedSalary}`)
+                        .style('left', (event.pageX + 10) + 'px')
+                        .style('top', (event.pageY - 30) + 'px');
+                })
+                .on('mouseout', function() {
+                    tooltip.style('visibility', 'hidden');
+                });
             });
+
+            
+
+        const tooltip = d3.select('body')
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('position', 'absolute')
+            .style('background-color', 'white')
+            .style('padding', '5px')
+            .style('border', '1px solid #ddd')
+            .style('border-radius', '3px')
+            .style('box-shadow', '0 1px 3px rgba(0,0,0,0.3)')
+            .style('pointer-events', 'none')
+            .style('visibility', 'hidden');
+        
     }
 }

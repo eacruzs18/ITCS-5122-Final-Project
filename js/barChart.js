@@ -94,14 +94,14 @@ class BarChart {
         let vis = this;
 
         const salaryByType = d3.rollups(vis.data,
-            group => d3.sum(group, d => d.salary),
+            group => d3.mean(group, d => d.salary),
             d => d.experience_level
         );
 
         vis.aggregatedData = Array.from(salaryByType, ([key, value]) => ({
             key: key,
             value: value
-        }));
+        })).sort((a,b) => a.value - b.value);
 
         vis.xScale.domain(vis.aggregatedData.map(d => d.key));
         vis.yScale.domain([0, d3.max(vis.aggregatedData, d => d.value)]);
@@ -128,12 +128,47 @@ class BarChart {
             .attr('y', d => vis.yScale(d.value))
             .attr('width', vis.xScale.bandwidth())
             .attr('height', d => vis.height - vis.yScale(d.value))
-            .attr('fill', d => vis.colorScale(d.key));
+            .attr('fill', d => vis.colorScale(d.key))
+            .on('mouseover', function(event, d) {
+                const formattedSalary = d3.format(',.2f')(d.value);
+                tooltip.style('visibility', 'visible')
+                .html(`<strong>Experience Level:</strong> ${d.key}<br><strong>Salary:</strong> $${formattedSalary}`)
+                .style('left', (event.pageX + 10) + 'px')
+                .style('top', (event.pageY - 30) + 'px');
+            })
+            .on('mouseout', function() {
+                tooltip.style('visibility', 'hidden');
+            });
+
+            vis.xAxisG.call(vis.xAxis);
+            vis.yAxisG.call(vis.yAxis);
+
+        const labels = vis.chart.selectAll('.label')
+            .data(vis.aggregatedData);
+
+        labels.enter().append('text')
+        .attr('class','label')
+        .merge(labels)
+        .attr('x', d=> vis.xScale(d.key) + vis.xScale.bandwidth()/2)
+        .attr('y', d=> vis.yScale(d.value)-5)
+        .style('text-anchor','middle')
+        .text(d => d3.format('$,.2f')(d.value))
+
+        const tooltip = d3.select('body')
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('position', 'absolute')
+            .style('background-color', 'white')
+            .style('padding', '5px')
+            .style('border', '1px solid #ddd')
+            .style('border-radius', '3px')
+            .style('box-shadow', '0 1px 3px rgba(0,0,0,0.3)')
+            .style('pointer-events', 'none')
+            .style('visibility', 'hidden');
 
         // Remove excess bars
         bars.exit().remove();
 
-        vis.xAxisG.call(vis.xAxis);
-        vis.yAxisG.call(vis.yAxis);
+       
     }
 }
