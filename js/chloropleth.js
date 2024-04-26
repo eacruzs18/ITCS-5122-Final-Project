@@ -59,7 +59,7 @@ class Chloropleth {
         let vis = this;
         // Load external data and boot
         Promise.all([
-            d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"),
+            d3.json("data/world.geojson"),
             d3.csv('data/detailedata.csv', function(d) {
                 vis.data.set(d['alpha-3'], +d.salary_in_usd)
             })
