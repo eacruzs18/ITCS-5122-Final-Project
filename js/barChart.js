@@ -9,7 +9,7 @@ class BarChart {
     constructor(_config, _data, _colorScale) {
         this.config = {
             parentElement: _config.parentElement,
-            containerWidth: _config.containerWidth || 500,
+            containerWidth: _config.containerWidth || 700,
             containerHeight: _config.containerHeight || 300,
             margin: _config.margin || {
                 top: 30,
@@ -29,7 +29,7 @@ class BarChart {
     initVis() {
         let vis = this;
 
-        vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right;
+        vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right - 200;
         vis.height = vis.config.containerHeight - vis.config.margin.top - vis.config.margin.bottom;
 
         vis.svg = d3.select(vis.config.parentElement)
@@ -70,16 +70,16 @@ class BarChart {
 
         vis.svg.append('text')
             .attr('class', 'axis-title')
-            .attr('x', vis.config.containerWidth / 2)
-            .attr('y', vis.config.containerHeight - 10)
+            .attr('x', vis.config.containerWidth / 2 - 50)
+            .attr('y', vis.config.containerHeight - 20)
             .attr('dy', '.71em')
             .style('text-anchor', 'middle')
             .text('Experience Level');
 
         vis.svg.append('text')
             .attr('class', 'chart-title')
-            .attr('x', vis.config.containerWidth / 2)
-            .attr('y', vis.config.margin.top / 10)
+            .attr('x', vis.config.containerWidth / 2 - 50)
+            .attr('y', vis.config.margin.top / 10 -2)
             .attr('dy', '.71em')
             .style('text-anchor', 'middle')
             .text('Salary by Employment Type');
@@ -166,6 +166,35 @@ class BarChart {
             .style('pointer-events', 'none')
             .style('visibility', 'hidden');
 
+
+        //legend
+        const keys = ['Entry-Level', 'Mid-level', 'Senior-Level', 'Executive-Level'];
+        const size = 20;
+        const color = d3.scaleOrdinal()
+                .domain(keys)
+                .range(d3.schemeSet1);
+
+        vis.chart.selectAll("barkeys")
+            .data(keys)
+            .enter()
+            .append("rect")
+                .attr("x", vis.config.containerWidth-375)
+                .attr("y", function(d,i){ return 75 + i*(size+5)}) // 100 is where the first dot appears. 25 is the distance between dots
+                .attr("width", size)
+                .attr("height", size)
+                .style("fill", function(d){ return color(d)});
+
+            // Add one dot in the legend for each name.
+        vis.chart.selectAll("barkeylabels")
+            .data(keys)
+            .enter()
+            .append("text")
+                .attr("x", vis.config.containerWidth-375 + size*1.2)
+                .attr("y", function(d,i){ return 75 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
+                .style("fill", function(d){ return color(d)})
+                .text(function(d){ return d})
+                .attr("text-anchor", "left")
+                .style("alignment-baseline", "middle");
         // Remove excess bars
         bars.exit().remove();
 
