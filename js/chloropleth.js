@@ -3,7 +3,7 @@ class Chloropleth {
     constructor(_config, _data, _colorScale) {
         this.config = {
             parentElement: _config.parentElement,
-            containerWidth: _config.containerWidth || 500,
+            containerWidth: _config.containerWidth || 700,
             containerHeight: _config.containerHeight || 500,
             margin: _config.margin || {top: 25, right: 20, bottom: 20, left: 35}
         };
@@ -15,7 +15,7 @@ class Chloropleth {
     initVis() {
         let vis = this;
 
-        vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right;
+        vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right - 200;
         vis.height = vis.config.containerHeight - vis.config.margin.top - vis.config.margin.bottom;
 
         // The svg
@@ -93,7 +93,53 @@ class Chloropleth {
                 });
             });
 
-            
+        //legend
+        vis.chart.append('text')
+            .attr('x', vis.config.containerWidth - 220)
+            .attr('y', 190)
+            .text('Salary Range');
+
+        vis.chart.append('text')
+            .attr('x', vis.config.containerWidth - 150)
+            .attr('y', 235)
+            .text("$230,000");
+
+        vis.chart.append('text')
+            .attr('x', vis.config.containerWidth - 230)
+            .attr('y', 235)
+            .text('$0');
+
+        const defs = vis.chart.append('defs');
+
+        const gradient = defs.append("linearGradient")
+                .attr("id", "svgGradient")
+                .attr("x1", "0%")
+                .attr("x2", "100%")
+
+        gradient.append("stop")
+                .attr("class", "start")
+                .attr("offset", "0%")
+                .attr("stop-color", d3.interpolateOranges(0))
+                .attr("stop-opacity", 1);
+                
+        gradient.append("stop")
+                .attr("class", "mid")
+                .attr("offset", "50%")
+                .attr("stop-color", d3.interpolateOranges(.5))
+                .attr("stop-opacity", 1);
+
+        gradient.append("stop")
+                .attr("class", "end")
+                .attr("offset", "100%")
+                .attr("stop-color", d3.interpolateOranges(1))
+                .attr("stop-opacity", 1);
+
+        const legend = vis.chart.append('rect')
+                .attr('x', vis.config.containerWidth - 220)
+                .attr('y', 200)
+                .attr('width', 100)
+                .attr('height', 20)
+                .attr('fill', "url(#svgGradient)");
 
         const tooltip = d3.select('body')
             .append('div')
