@@ -66,7 +66,10 @@ class Chloropleth {
         Promise.all([
             d3.json("data/world.geojson"),
             d3.csv('data/detailedata.csv', function(d) {
-                vis.data.set(d['alpha-3'], +d.salary_in_usd)
+                vis.data.set(d['alpha-3'], {
+                    salary: +d.salary_in_usd,
+                    name: d.name
+                })
             })
         ]).then(function(loadData) {
             let topo = loadData[0]
@@ -77,21 +80,25 @@ class Chloropleth {
                 .data(topo.features)
                 .join("path")
                 // draw each country
-                .attr("d", d3.geoPath()
-                    .projection(vis.projection)
-                )
+                .attr("d", d3.geoPath().projection(vis.projection))
                 // set the color of each country
                 .attr("fill", function(d) {
-                    d.total = vis.data.get(d.id) || 0;
-                    return vis.colorScale(d.total);
+                    const countryData = vis.data.get(d.id);
+                    d.total = countryData ? countryData.salary : 0;
+                    return vis.colorScale(d.total)
                 })
                 .on('mouseover', function(event, d) {
-                    const formattedSalary = d3.format(',.2f')(d.total);
+                    const countryData = vis.data.get(d.id);
+                    if (countryData && countryData.salary > 0 & countryData.name !== "Unknown") {
+                        const formattedSalary = d3.format(',.2f')(d.total);
+                        const countryName = countryData ? countryData.name : "Unknown";
 
-                    tooltip.style('visibility', 'visible')
-                        .html(`<strong>Country:</strong> ${d.id}<br><strong>Average Salary:</strong> $${formattedSalary}`)
-                        .style('left', (event.pageX + 10) + 'px')
-                        .style('top', (event.pageY - 30) + 'px');
+                        tooltip.style('visibility', 'visible')
+                            .html(`<strong>Country:</strong> ${countryName}<br><strong>Average Salary:</strong> $${formattedSalary}`)
+                            .style('left', (event.pageX + 10) + 'px')
+                            .style('top', (event.pageY - 30) + 'px');
+                    }
+
                 })
                 .on('mouseout', function() {
                     tooltip.style('visibility', 'hidden');
