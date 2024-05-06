@@ -1,66 +1,73 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Noto+Sans+JP:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Noto+Sans+JP:wght@100..900&display=swap");
 
 body {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 13px;
-    padding: 30px;
-    background: #f7f7f7;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 14px;
+  padding: 30px;
+  background: #f7f7f7;
+  color: #333;
 }
 
 h1 {
-    margin-top: 0;
-    text-align: center;
+  font-family: "Fredoka", sans-serif;
+  margin-top: 0;
+  text-align: center;
+  font-size: 24px;
+  color: #444;
 }
 
 .container {
-    display: flex;
+  display: flex;
+  justify-content: center;
 }
 
 #scatterplot {
-    margin-right: 30px;
+  margin-right: 30px;
+  flex: 1;
 }
 
 .bar {
-    shape-rendering: crispEdges;
+  shape-rendering: crispEdges;
+  transition: fill 0.3s, stroke 0.3s;
 }
 
 .bar:hover {
-    stroke: #777;
+  stroke: #555;
 }
 
 .bar.active {
-    stroke: #000;
-    stroke-width: 2px;
+  stroke: #222;
+  stroke-width: 2px;
 }
 
 .axis line {
-    fill: none;
-    stroke: #ddd;
-    shape-rendering: crispEdges;
+  fill: none;
+  stroke: #ccc;
+  shape-rendering: crispEdges;
 }
 
 .axis text {
-    font-size: 13px;
-    fill: #6b6b6b;
+  font-size: 14px;
+  fill: #555;
 }
 
 .axis-title {
-    font-size: 13px;
-    fill: #888;
+  font-size: 15px;
+  fill: #666;
 }
 
 .y-axis .tick:first-child line {
-    stroke: #b1b1b1;
+  stroke: #b1b1b1;
 }
 
 .y-axis .tick:first-child text {
-    display: none;
+  display: none;
 }
 
 .x-axis .tick:first-child line {
-    display: none;
+  display: none;
 }
 
 .axis path {
-    display: none;
+  display: none;
 }
