@@ -105,7 +105,7 @@ class BarChart {
         );
 
         vis.aggregatedData = Array.from(salaryByType, ([key, value]) => ({key, value}))
-                                .sort((a,b) => d3.descending(a.value,b.value));
+                                .sort((a,b) => d3.ascending(a.value,b.value));
         
         vis.xScale.domain(vis.aggregatedData.map(d=>d.key));
         vis.yScale.domain([0, d3.max(vis.aggregatedData, d=> d.value)]);
@@ -186,7 +186,8 @@ class BarChart {
 
         //legend
         const keys = ['Entry-Level', 'Mid-level', 'Senior-Level', 'Executive-Level'];
-        const colors = ['#d62728', '#2da02d', '#ff7f0f', '#2077b4']; 
+        const colors = ['#2077b4', '#ff7f0f', '#2da02d', '#d62728']; 
+
         const size = 20;
         const color = d3.scaleOrdinal()
             .domain(keys)
