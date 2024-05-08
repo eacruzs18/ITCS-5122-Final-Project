@@ -91,28 +91,31 @@ class BarChart {
     /**
      * this function is used to prepare the data and update the scales before we render the actual vis
      */
-    updateVis(selectedCountry = 'all'){
+    updateVis(selectedCountry = 'all') {
         let vis = this;
 
         let filteredData = vis.data;
-        if(selectedCountry !== 'all'){
+        if (selectedCountry !== 'all') {
             filteredData = vis.data.filter(d => d.country === selectedCountry);
         }
 
         const salaryByType = d3.rollups(filteredData,
-            group => d3.mean(group, d=> d.salary_in_usd),
+            group => d3.mean(group, d => d.salary_in_usd),
             d => d.experience_level
         );
 
-        vis.aggregatedData = Array.from(salaryByType, ([key, value]) => ({key, value}))
-                                .sort((a,b) => d3.ascending(a.value,b.value));
-        
-        vis.xScale.domain(vis.aggregatedData.map(d=>d.key));
-        vis.yScale.domain([0, d3.max(vis.aggregatedData, d=> d.value)]);
+        vis.aggregatedData = Array.from(salaryByType, ([key, value]) => ({
+                key,
+                value
+            }))
+            .sort((a, b) => d3.ascending(a.value, b.value));
 
-        vis.renderVis();      
+        vis.xScale.domain(vis.aggregatedData.map(d => d.key));
+        vis.yScale.domain([0, d3.max(vis.aggregatedData, d => d.value)]);
+
+        vis.renderVis();
     }
-    
+
     /**
      * this function contains the d3 code for binding data to visual elements
      */
@@ -141,18 +144,18 @@ class BarChart {
                 tooltip.style('visibility', 'hidden');
             })
             .on('click', function(event, d) {
-                const isSelected = d3.select(this).classed('active'); 
+                const isSelected = d3.select(this).classed('active');
                 d3.select(this).classed('active', !isSelected);
 
                 const selectedExp = vis.chart.selectAll('.bar.active')
                     .data()
                     .map(d => d.key);
-                    console.log(`${selectedExp}`);
+                console.log(`${selectedExp}`);
                 vis.dispatcher.call('filterExp', event, selectedExp);
             });
 
         bars.exit()
-        .remove();
+            .remove();
 
         vis.xAxisG.call(vis.xAxis);
         vis.yAxisG.call(vis.yAxis);
@@ -186,7 +189,7 @@ class BarChart {
 
         //legend
         const keys = ['Entry-Level', 'Mid-level', 'Senior-Level', 'Executive-Level'];
-        const colors = ['#2077b4', '#ff7f0f', '#2da02d', '#d62728']; 
+        const colors = ['#2077b4', '#ff7f0f', '#2da02d', '#d62728'];
 
         const size = 20;
         const color = d3.scaleOrdinal()
