@@ -5,12 +5,7 @@ class Chloropleth {
             parentElement: _config.parentElement,
             containerWidth: _config.containerWidth || 700,
             containerHeight: _config.containerHeight || 500,
-            margin: _config.margin || {
-                top: 25,
-                right: 20,
-                bottom: 20,
-                left: 35
-            }
+            margin: _config.margin || {top: 25, right: 20, bottom: 20, left: 35}
         };
         this.csvdata = _data;
         this.colorScale = _colorScale;
@@ -29,16 +24,14 @@ class Chloropleth {
             .attr('id', 'chloropleth')
             .attr('width', vis.config.containerWidth)
             .attr('height', vis.config.containerHeight);
-
+        
         vis.chart = vis.svg.append('g')
             .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
 
         vis.svg.append('text')
             .attr('class', 'chart-title')
-
             .attr('x', vis.config.containerWidth / 2 -50)
             .attr('y', vis.config.margin.top +30)
-
             .attr('dy', '.71em')
             .style('text-anchor', 'middle')
             .text('Average Salary by Country');
@@ -47,9 +40,9 @@ class Chloropleth {
         vis.path = d3.geoPath();
         vis.projection = d3.geoMercator()
             .scale(70)
-            .center([0, 20])
+            .center([0,20])
             .translate([vis.width / 2, vis.height / 2]);
-
+   
     }
 
     updateVis() {
@@ -65,35 +58,26 @@ class Chloropleth {
 
     renderVis() {
         let vis = this;
-        
-
+        // Load external data and boot
         d3.json("data/world.geojson").then(function(topo) {
             // Draw the map
             vis.chart.selectAll("path")
-
                 .data(topo.features)
                 .join("path")
                 // draw each country
                 .attr("d", d3.geoPath().projection(vis.projection))
-
-                // set the color of each country
-                .attr("fill", function(d) {
-                    const countryData = vis.data.get(d.id);
-                    d.total = countryData ? countryData.salary : 0;
-                    return vis.colorScale(d.total)
+                // set the color of each country based on salary
+                .attr("fill", function (d) {
+                    d.total = vis.data.get(d.id) || 0;
+                    return vis.colorScale(d.total);
                 })
                 .on('mouseover', function(event, d) {
-                    const countryData = vis.data.get(d.id);
-                    if (countryData && countryData.salary > 0 & countryData.name !== "Unknown") {
-                        const formattedSalary = d3.format(',.2f')(d.total);
-                        const countryName = countryData ? countryData.name : "Unknown";
-
-                        tooltip.style('visibility', 'visible')
-                            .html(`<strong>Country:</strong> ${countryName}<br><strong>Average Salary:</strong> $${formattedSalary}`)
-                            .style('left', (event.pageX + 10) + 'px')
-                            .style('top', (event.pageY - 30) + 'px');
-                    }
-
+                    const formattedSalary = d3.format(',.2f')(d.total);
+    
+                    tooltip.style('visibility', 'visible')
+                        .html(`<strong>Country:</strong> ${d.id}<br><strong>Average Salary:</strong> $${formattedSalary}`)
+                        .style('left', (event.pageX + 10) + 'px')
+                        .style('top', (event.pageY - 30) + 'px');
                 })
                 .on('mouseout', function() {
                     tooltip.style('visibility', 'hidden');
@@ -119,34 +103,34 @@ class Chloropleth {
         const defs = vis.chart.append('defs');
 
         const gradient = defs.append("linearGradient")
-            .attr("id", "svgGradient")
-            .attr("x1", "0%")
-            .attr("x2", "100%")
+                .attr("id", "svgGradient")
+                .attr("x1", "0%")
+                .attr("x2", "100%")
 
         gradient.append("stop")
-            .attr("class", "start")
-            .attr("offset", "0%")
-            .attr("stop-color", d3.interpolateOranges(0))
-            .attr("stop-opacity", 1);
+                .attr("class", "start")
+                .attr("offset", "0%")
+                .attr("stop-color", d3.interpolateOranges(0))
+                .attr("stop-opacity", 1);
+                
+        gradient.append("stop")
+                .attr("class", "mid")
+                .attr("offset", "50%")
+                .attr("stop-color", d3.interpolateOranges(.5))
+                .attr("stop-opacity", 1);
 
         gradient.append("stop")
-            .attr("class", "mid")
-            .attr("offset", "50%")
-            .attr("stop-color", d3.interpolateOranges(.5))
-            .attr("stop-opacity", 1);
-
-        gradient.append("stop")
-            .attr("class", "end")
-            .attr("offset", "100%")
-            .attr("stop-color", d3.interpolateOranges(1))
-            .attr("stop-opacity", 1);
+                .attr("class", "end")
+                .attr("offset", "100%")
+                .attr("stop-color", d3.interpolateOranges(1))
+                .attr("stop-opacity", 1);
 
         const legend = vis.chart.append('rect')
-            .attr('x', vis.config.containerWidth - 220)
-            .attr('y', 200)
-            .attr('width', 100)
-            .attr('height', 20)
-            .attr('fill', "url(#svgGradient)");
+                .attr('x', vis.config.containerWidth - 220)
+                .attr('y', 200)
+                .attr('width', 100)
+                .attr('height', 20)
+                .attr('fill', "url(#svgGradient)");
 
         const tooltip = d3.select('body')
             .append('div')
@@ -159,6 +143,6 @@ class Chloropleth {
             .style('box-shadow', '0 1px 3px rgba(0,0,0,0.3)')
             .style('pointer-events', 'none')
             .style('visibility', 'hidden');
-
+        
     }
 }
