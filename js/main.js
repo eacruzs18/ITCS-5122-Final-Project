@@ -1,8 +1,10 @@
 let data;
 let scatterplot, barchart, chloropleth;
+let expFilter = [];
 
+const dispatcher = d3.dispatch('filterExp');
 
-d3.csv('data/salarieswithcostoflivingdata.csv').then(_data => {
+d3.csv('data/new_cost_of_living.csv').then(_data => {
     data = _data;
     data.forEach(d => {
         d.salary = +d['salary_in_usd'];
@@ -20,7 +22,7 @@ d3.csv('data/salarieswithcostoflivingdata.csv').then(_data => {
 
     barchart = new BarChart({
         parentElement: '#barchart'
-    }, data, colorScale);
+    }, data, colorScale, dispatcher);
     
    chloropleth = new Chloropleth({
         parentElement: '#chloropleth'
@@ -28,3 +30,13 @@ d3.csv('data/salarieswithcostoflivingdata.csv').then(_data => {
     chloropleth.updateVis();
 
 }).catch(error => console.error(error));
+
+dispatcher.on('filterExp', selectedExp => {
+    console.log(`${selectedExp}`);
+    if (!selectedExp || selectedExp.length === 0) {
+        scatterplot.data = data;
+    } else {
+        scatterplot.data = data.filter(d => selectedExp.includes(d.experience_level));
+    }
+    scatterplot.updateVis();
+});

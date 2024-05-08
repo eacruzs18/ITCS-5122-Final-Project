@@ -30,7 +30,7 @@ class Chloropleth {
 
         vis.svg.append('text')
             .attr('class', 'chart-title')
-            .attr('x', vis.config.containerWidth / 2)
+            .attr('x', vis.config.containerWidth / 2 -50)
             .attr('y', vis.config.margin.top +30)
             .attr('dy', '.71em')
             .style('text-anchor', 'middle')
