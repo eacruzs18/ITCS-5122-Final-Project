@@ -13,6 +13,21 @@ d3.csv('data/new_cost_of_living.csv').then(_data => {
         d.alpha3 = d['alpha-4'];
     });
 
+    const uniqueCountries = Array.from(new Set(data.map(d=>d.country)));
+    const select = d3.select('#countrySelector')
+
+    select.selectAll('option.country')
+        .data(uniqueCountries)
+        .enter()
+        .append('option')
+        .classed('country',true)
+        .attr('value', d=>d)
+        .text(d => d);
+
+    d3.select('#countrySelector').on('change', function () {
+        const selectedCountry = d3.select(this).property('value');
+        barchart.updateVis(selectedCountry)
+    })
 
     const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 

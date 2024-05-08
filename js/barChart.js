@@ -91,28 +91,28 @@ class BarChart {
     /**
      * this function is used to prepare the data and update the scales before we render the actual vis
      */
-    updateVis() {
+    updateVis(selectedCountry = 'all'){
         let vis = this;
 
-        const salaryByType = d3.rollups(vis.data,
-            group => d3.mean(group, d => d.salary),
+        let filteredData = vis.data;
+        if(selectedCountry !== 'all'){
+            filteredData = vis.data.filter(d => d.country === selectedCountry);
+        }
+
+        const salaryByType = d3.rollups(filteredData,
+            group => d3.mean(group, d=> d.salary_in_usd),
             d => d.experience_level
         );
 
-        vis.aggregatedData = Array.from(salaryByType, ([key, value]) => ({
-            key: key,
-            value: value
-        })).sort((a, b) => a.value - b.value);
+        vis.aggregatedData = Array.from(salaryByType, ([key, value]) => ({key, value}))
+                                .sort((a,b) => d3.ascending(a.value,b.value));
+        
+        vis.xScale.domain(vis.aggregatedData.map(d=>d.key));
+        vis.yScale.domain([0, d3.max(vis.aggregatedData, d=> d.value)]);
 
-        vis.xScale.domain(vis.aggregatedData.map(d => d.key));
-        vis.yScale.domain([0, d3.max(vis.aggregatedData, d => d.value)]);
-
-        vis.colorScale = d3.scaleOrdinal(d3.schemeSet1)
-            .domain(vis.aggregatedData.map(d => d.key));
-
-        vis.renderVis();
+        vis.renderVis();      
     }
-
+    
     /**
      * this function contains the d3 code for binding data to visual elements
      */
@@ -151,6 +151,9 @@ class BarChart {
                 vis.dispatcher.call('filterExp', event, selectedExp);
             });
 
+        bars.exit()
+        .remove();
+
         vis.xAxisG.call(vis.xAxis);
         vis.yAxisG.call(vis.yAxis);
 
@@ -164,6 +167,9 @@ class BarChart {
             .attr('y', d => vis.yScale(d.value) - 5)
             .style('text-anchor', 'middle')
             .text(d => d3.format('$,.2f')(d.value))
+
+        labels.exit()
+            .remove();
 
         const tooltip = d3.select('body')
             .append('div')
@@ -180,10 +186,12 @@ class BarChart {
 
         //legend
         const keys = ['Entry-Level', 'Mid-level', 'Senior-Level', 'Executive-Level'];
+        const colors = ['#2077b4', '#ff7f0f', '#2da02d', '#d62728']; 
+
         const size = 20;
         const color = d3.scaleOrdinal()
             .domain(keys)
-            .range(d3.schemeSet1);
+            .range(colors);
 
         vis.chart.selectAll("barkeys")
             .data(keys)
