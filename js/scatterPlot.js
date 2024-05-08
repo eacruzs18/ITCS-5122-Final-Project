@@ -132,7 +132,6 @@ class ScatterPlot {
         vis.xScale.domain([0, d3.max(vis.countryAverages, d => d.averageSalary)]).nice();
         vis.yScale.domain([0, d3.max(vis.countryAverages, d => d.averageCostOfLiving)]).nice();
 
-
         vis.renderVis();
     }
 
