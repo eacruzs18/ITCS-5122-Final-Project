@@ -80,7 +80,7 @@ class BarChart {
         vis.svg.append('text')
             .attr('class', 'chart-title')
             .attr('x', vis.config.containerWidth / 2 - 50)
-            .attr('y', vis.config.margin.top / 10 -2)
+            .attr('y', vis.config.margin.top / 10 - 2)
             .attr('dy', '.71em')
             .style('text-anchor', 'middle')
             .text('Salary by Employment Type');
@@ -102,7 +102,7 @@ class BarChart {
         vis.aggregatedData = Array.from(salaryByType, ([key, value]) => ({
             key: key,
             value: value
-        })).sort((a,b) => a.value - b.value);
+        })).sort((a, b) => a.value - b.value);
 
         vis.xScale.domain(vis.aggregatedData.map(d => d.key));
         vis.yScale.domain([0, d3.max(vis.aggregatedData, d => d.value)]);
@@ -133,9 +133,9 @@ class BarChart {
             .on('mouseover', function(event, d) {
                 const formattedSalary = d3.format(',.2f')(d.value);
                 tooltip.style('visibility', 'visible')
-                .html(`<strong>Experience Level:</strong> ${d.key}<br><strong>Salary:</strong> $${formattedSalary}`)
-                .style('left', (event.pageX + 10) + 'px')
-                .style('top', (event.pageY - 30) + 'px');
+                    .html(`<strong>Experience Level:</strong> ${d.key}<br><strong>Salary:</strong> $${formattedSalary}`)
+                    .style('left', (event.pageX + 10) + 'px')
+                    .style('top', (event.pageY - 30) + 'px');
             })
             .on('mouseout', function() {
                 tooltip.style('visibility', 'hidden');
@@ -151,19 +151,19 @@ class BarChart {
                 vis.dispatcher.call('filterExp', event, selectedExp);
             });
 
-            vis.xAxisG.call(vis.xAxis);
-            vis.yAxisG.call(vis.yAxis);
+        vis.xAxisG.call(vis.xAxis);
+        vis.yAxisG.call(vis.yAxis);
 
         const labels = vis.chart.selectAll('.label')
             .data(vis.aggregatedData);
 
         labels.enter().append('text')
-        .attr('class','label')
-        .merge(labels)
-        .attr('x', d=> vis.xScale(d.key) + vis.xScale.bandwidth()/2)
-        .attr('y', d=> vis.yScale(d.value)-5)
-        .style('text-anchor','middle')
-        .text(d => d3.format('$,.2f')(d.value))
+            .attr('class', 'label')
+            .merge(labels)
+            .attr('x', d => vis.xScale(d.key) + vis.xScale.bandwidth() / 2)
+            .attr('y', d => vis.yScale(d.value) - 5)
+            .style('text-anchor', 'middle')
+            .text(d => d3.format('$,.2f')(d.value))
 
         const tooltip = d3.select('body')
             .append('div')
@@ -182,33 +182,43 @@ class BarChart {
         const keys = ['Entry-Level', 'Mid-level', 'Senior-Level', 'Executive-Level'];
         const size = 20;
         const color = d3.scaleOrdinal()
-                .domain(keys)
-                .range(d3.schemeSet1);
+            .domain(keys)
+            .range(d3.schemeSet1);
 
         vis.chart.selectAll("barkeys")
             .data(keys)
             .enter()
             .append("rect")
-                .attr("x", vis.config.containerWidth-375)
-                .attr("y", function(d,i){ return 75 + i*(size+5)}) // 100 is where the first dot appears. 25 is the distance between dots
-                .attr("width", size)
-                .attr("height", size)
-                .style("fill", function(d){ return color(d)});
+            .attr("x", vis.config.containerWidth - 375)
+            .attr("y", function(d, i) {
+                return 75 + i * (size + 5)
+            }) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("width", size)
+            .attr("height", size)
+            .style("fill", function(d) {
+                return color(d)
+            });
 
-            // Add one dot in the legend for each name.
+        // Add one dot in the legend for each name.
         vis.chart.selectAll("barkeylabels")
             .data(keys)
             .enter()
             .append("text")
-                .attr("x", vis.config.containerWidth-375 + size*1.2)
-                .attr("y", function(d,i){ return 75 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
-                .style("fill", function(d){ return color(d)})
-                .text(function(d){ return d})
-                .attr("text-anchor", "left")
-                .style("alignment-baseline", "middle");
+            .attr("x", vis.config.containerWidth - 375 + size * 1.2)
+            .attr("y", function(d, i) {
+                return 75 + i * (size + 5) + (size / 2)
+            }) // 100 is where the first dot appears. 25 is the distance between dots
+            .style("fill", function(d) {
+                return color(d)
+            })
+            .text(function(d) {
+                return d
+            })
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle");
         // Remove excess bars
         bars.exit().remove();
 
-       
+
     }
 }

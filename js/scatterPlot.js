@@ -102,7 +102,7 @@ class ScatterPlot {
             .style('text-anchor', 'end')
             .text('Salary In USD');
 
-            vis.svg.append('text')
+        vis.svg.append('text')
             .attr('class', 'chart-title')
             .attr('x', vis.config.containerWidth / 2)
             .attr('y', vis.config.margin.top / 10)
@@ -159,7 +159,7 @@ class ScatterPlot {
                 console.log(`Hovered over ${d.country} - Average Salary: $${formattedSalary}, Average Cost of Living: $${formattedCost}`);
 
                 tooltip.style('visibility', 'visible')
-                    .html(`<strong>Country:</strong> ${d.country}<br><strong><Average Salary:</strong> $${formattedSalary}<br><strong>Average Cost of Living:</strong> ${formattedCost}`)
+                    .html(`<strong>Country:</strong> ${d.country}<br><strong>Average Salary:</strong> $${formattedSalary}<br><strong>Average Cost of Living:</strong> ${formattedCost}`)
                     .style('left', (event.pageX + 10) + 'px')
                     .style('top', (event.pageY - 30) + 'px');
             })
