@@ -6,7 +6,7 @@ class BarChart {
      * @param {Array} _data 
      * @param {d3.Scale} _colorScale 
      */
-    constructor(_config, _data, _colorScale) {
+    constructor(_config, _data, _colorScale, _dispatcher) {
         this.config = {
             parentElement: _config.parentElement,
             containerWidth: _config.containerWidth || 700,
@@ -20,6 +20,7 @@ class BarChart {
         };
         this.data = _data;
         this.colorScale = _colorScale;
+        this.dispatcher = _dispatcher || null;
         this.initVis();
     }
 
@@ -138,6 +139,16 @@ class BarChart {
             })
             .on('mouseout', function() {
                 tooltip.style('visibility', 'hidden');
+            })
+            .on('click', function(event, d) {
+                const isSelected = d3.select(this).classed('active'); 
+                d3.select(this).classed('active', !isSelected);
+
+                const selectedExp = vis.chart.selectAll('.bar.active')
+                    .data()
+                    .map(d => d.key);
+                    console.log(`${selectedExp}`);
+                vis.dispatcher.call('filterExp', event, selectedExp);
             });
 
         vis.xAxisG.call(vis.xAxis);

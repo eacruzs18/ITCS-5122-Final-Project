@@ -73,17 +73,17 @@ class ScatterPlot {
         vis.yAxisG = vis.chart.append('g')
             .attr('class', 'axis y-axis');
 
-        vis.countryData = d3.group(vis.data, d => d.country);
+        // vis.countryData = d3.group(vis.data, d => d.country);
 
-        vis.countryAverages = Array.from(vis.countryData, ([country, values]) => {
-            const averageSalary = d3.mean(values, d => d.salary);
-            const averageCostOfLiving = d3.mean(values, d => d.costofliving);
-            return {
-                country,
-                averageSalary,
-                averageCostOfLiving
-            };
-        });
+        // vis.countryAverages = Array.from(vis.countryData, ([country, values]) => {
+        //     const averageSalary = d3.mean(values, d => d.salary);
+        //     const averageCostOfLiving = d3.mean(values, d => d.costofliving);
+        //     return {
+        //         country,
+        //         averageSalary,
+        //         averageCostOfLiving
+        //     };
+        // });
 
         // add axis title for Y
         vis.svg.append('text')
@@ -116,6 +116,18 @@ class ScatterPlot {
      */
     updateVis() {
         let vis = this;
+
+        vis.countryData = d3.group(vis.data, d => d.country);
+
+        vis.countryAverages = Array.from(vis.countryData, ([country, values]) => {
+            const averageSalary = d3.mean(values, d => d.salary);
+            const averageCostOfLiving = d3.mean(values, d => d.costofliving);
+            return {
+                country,
+                averageSalary,
+                averageCostOfLiving
+            };
+        });
 
         vis.xScale.domain([0, d3.max(vis.countryAverages, d => d.averageSalary)]).nice();
         vis.yScale.domain([0, d3.max(vis.countryAverages, d => d.averageCostOfLiving)]).nice();

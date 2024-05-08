@@ -35,8 +35,10 @@ class Chloropleth {
 
         vis.svg.append('text')
             .attr('class', 'chart-title')
-            .attr('x', vis.config.containerWidth / 2)
-            .attr('y', vis.config.margin.top + 30)
+
+            .attr('x', vis.config.containerWidth / 2 -50)
+            .attr('y', vis.config.margin.top +30)
+
             .attr('dy', '.71em')
             .style('text-anchor', 'middle')
             .text('Average Salary by Country');
@@ -53,7 +55,8 @@ class Chloropleth {
     updateVis() {
         let vis = this;
 
-        vis.data = new Map()
+        vis.data = new Map(vis.csvdata.map(d => [d['alpha-4'], d.salary_in_usd]))
+        console.log(`${vis.data}`);
         vis.colorScale = d3.scaleSequential(d3.interpolateOranges)
             .domain([0, d3.max(vis.csvdata, d => d.salary_in_usd)]);
 
@@ -62,25 +65,17 @@ class Chloropleth {
 
     renderVis() {
         let vis = this;
-        // Load external data and boot
-        Promise.all([
-            d3.json("data/world.geojson"),
-            d3.csv('data/detailedata.csv', function(d) {
-                vis.data.set(d['alpha-3'], {
-                    salary: +d.salary_in_usd,
-                    name: d.name
-                })
-            })
-        ]).then(function(loadData) {
-            let topo = loadData[0]
+        
 
+        d3.json("data/world.geojson").then(function(topo) {
             // Draw the map
-            vis.chart.append("g")
-                .selectAll("path")
+            vis.chart.selectAll("path")
+
                 .data(topo.features)
                 .join("path")
                 // draw each country
                 .attr("d", d3.geoPath().projection(vis.projection))
+
                 // set the color of each country
                 .attr("fill", function(d) {
                     const countryData = vis.data.get(d.id);
